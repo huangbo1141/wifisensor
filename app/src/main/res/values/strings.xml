@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Wifi Sensor</string>
+    <string name="login">Log In</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgetpassword">Forgot password?</string>
+    <string name="signup">Sign UP</string>
+    <string name="nointernet">Please Connect to Internet</string>
+    <string name="passwordmismatch">password mismatch. please try again.</string>
+    <string name="somethingwentwrong">Something went wrong</string>
+    <string name="logout">Logout</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="crash_toast_text">Crash Report</string>
+
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Lat Long</string>
+    <string name="no_address_found">No Address Found</string>
+    <string name="address_found">Address Found</string>
+    <string name="no_geocoder_available">No Geocorder Available</string>
+
+
+    <array name="items">
+        <item>Forex and Commodities</item>
+        <item>Stocks and Indicies</item>
+        <item>Miscellaneous</item>
+    </array>
+    <string name="str_forex">CHOOSE YOUR QUIZ TO DETERMINE YOUR CORRECT AND INCORRECT LEVELS.</string>
+</resources>
