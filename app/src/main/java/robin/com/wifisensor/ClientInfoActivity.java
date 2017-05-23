@@ -206,6 +206,7 @@ public class ClientInfoActivity extends BaseTopActivity implements View.OnClickL
                     tblClient.tc_job = cinfo_job;
                     tblClient.tc_jobnum = cinfo_jobnumber;
                     tblClient.tc_date = cinfo_date;
+
                     tblClient.tc_interval = cinfo_interval;
                     TblClient dup = CGlobal.dbManager.checkDuplicate(tblClient);
                     if (dup == null){
