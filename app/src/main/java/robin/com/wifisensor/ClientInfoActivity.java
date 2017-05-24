@@ -17,8 +17,10 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,11 @@ public class ClientInfoActivity extends BaseTopActivity implements View.OnClickL
     String trackname = "";
     void init(){
         txtDate.setOnClickListener(this);
+        // month day year
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String strdate = simpleDateFormat.format(date);
+        txtDate.setText(strdate);
 
         Calendar calendar = Calendar.getInstance();
         month = calendar.get(Calendar.MONTH);
@@ -180,7 +187,7 @@ public class ClientInfoActivity extends BaseTopActivity implements View.OnClickL
     public void onClick(View view) {
         int id = view.getId();
         switch (id){
-            case R.id.edtDate:{
+            case R.id.txtDate:{
                 if (datePickerDialog == null) {
                     datePickerDialog = new DatePickerDialog(this, pickerListener1, year, month, day);
                 }
@@ -230,10 +237,8 @@ public class ClientInfoActivity extends BaseTopActivity implements View.OnClickL
         @Override
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            txtDate.setText(new StringBuilder().append(selectedMonth + 1)
-                    .append("-").append(selectedDay).append("-").append(selectedYear)
-                    .append(" ").toString());
-
+            String date = String.format("%02d-%02d-%02d",selectedMonth+1,selectedDay,selectedYear);
+            txtDate.setText(date);
             datePickerDialog.dismiss();
         }
     };
