@@ -276,7 +276,46 @@ public class ImageDatabaseHelper extends SQLiteOpenHelper {
         }
         return true;
     }
-    public TblClient checkDuplicate(TblClient tblClient){
+    public void deleteTrack(TblTrack data){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            String sql = "delete from "+ImageTable.TRACK_TABLE+" where tt_id = "+data.tt_id;
+            db.execSQL(sql);
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public TblTrack checkNextTrack(TblTrack data){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from " + ImageTable.TRACK_TABLE
+                + " where tc_id = '"+data.tc_id+"' "
+                + " and tt_id > "+data.tt_id+"";
+        Cursor c = db.rawQuery(sql, null);
+        TblTrack country = null;
+        if (c.moveToFirst()) {
+            int cid = c.getColumnIndex(ImageTable.TRACK_ID);
+            int cclientid = c.getColumnIndex(ImageTable.TRACK_CLIENTID);
+            int ctrack = c.getColumnIndex(ImageTable.TRACK_TRACK);
+            int corigin = c.getColumnIndex(ImageTable.TRACK_ORIGIN);
+            int cdevice = c.getColumnIndex(ImageTable.TRACK_DEVICE);
+
+            String id = c.getString(cid);
+            String clientid = c.getString(cclientid);
+            String track = c.getString(ctrack);
+            String origin = c.getString(corigin);
+            String device = c.getString(cdevice);
+
+            country = new TblTrack();
+            country.tt_id = id;
+            country.tc_id = clientid;
+            country.tt_track = track;
+            country.tt_origin = origin;
+            country.tt_device = device;
+        }
+        return country;
+    }
+    public TblClient checkDuplicateClient(TblClient tblClient){
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "select * from " + ImageTable.CLIENT_TABLE
                 + " where tc_name = '"+tblClient.tc_name+"' "

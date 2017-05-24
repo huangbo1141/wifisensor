@@ -1038,9 +1038,10 @@ public class CGlobal {
         return false;
     }
 
+    public static Random random = new Random(100);
+
     public static LineDataSet getDataSetSample(){
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-        Random random = new Random(100);
         for (int i=0; i<100; i+=10){
 
             float val = random.nextFloat();

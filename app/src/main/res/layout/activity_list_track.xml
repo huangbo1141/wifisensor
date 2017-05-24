@@ -64,7 +64,7 @@
             android:id="@+id/viewAction">
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
                 <LinearLayout
@@ -72,41 +72,90 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:text="TRACK"/>
                     <TextView
-                        android:id="@+id/txtTrack"
-                        android:paddingLeft="10dp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:layout_height="wrap_content"
+                        android:text="-"
+                        android:id="@+id/btnTrackMinus"
+                        android:textSize="50dp"/>
+                    <EditText
+                        android:id="@+id/edtTrack"
+                        android:paddingLeft="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:background="#00000000"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
                         android:text="1"/>
+                    <TextView
+                        android:gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        android:id="@+id/btnTrackPlus"
+                        android:textSize="40dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:text="FROM ORIGIN"/>
-                    <Spinner
-                        android:id="@+id/spinnerOrigin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                    </Spinner>
+                    <TextView
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:id="@+id/btnOriginMinus"
+                        android:textSize="50dp"/>
+                    <EditText
+                        android:id="@+id/edtOrigin"
+                        android:paddingLeft="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:background="#00000000"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:text="1"/>
+                    <TextView
+                        android:id="@+id/btnOriginPlus"
+                        android:layout_width="50dp"
+                        android:gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_height="wrap_content"
+                        android:text="+"
+                        android:textSize="40dp"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btnAction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
                     android:text="BEGIN" />
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btnComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="COMPLETE" />
             </LinearLayout>
         </LinearLayout>
 

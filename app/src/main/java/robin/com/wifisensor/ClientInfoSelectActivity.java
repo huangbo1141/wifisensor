@@ -3,15 +3,15 @@ package robin.com.wifisensor;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +67,42 @@ public class ClientInfoSelectActivity extends BaseTopActivity implements View.On
         init();
     }
 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            int what = msg.what;
+            switch (what){
+                case 100:{
+                    if (spinnerLocation.getAdapter().getCount()>0){
+                        spinnerLocation.setSelection(0);
+                        mHandler.sendEmptyMessageDelayed(101,100);
+                    }else{
+                        mHandler.sendEmptyMessageDelayed(100,100);
+                    }
+                    break;
+                }
+                case 101:{
+                    if (spinnerJob.getAdapter().getCount()>0){
+                        spinnerJob.setSelection(0);
+                        mHandler.sendEmptyMessageDelayed(102,100);
+                    }else{
+                        mHandler.sendEmptyMessageDelayed(101,100);
+                    }
+                    break;
+                }
+                case 102:{
+                    if (spinnerJobNumber.getAdapter().getCount()>0){
+                        spinnerJobNumber.setSelection(0);
+                        mHandler.sendEmptyMessageDelayed(103,100);
+                    }else{
+                        mHandler.sendEmptyMessageDelayed(102,100);
+                    }
+                    break;
+                }
+            }
+        }
+    };
+
     String trackname = "";
     TblClient mClient = null;
     void init(){
@@ -108,6 +143,13 @@ public class ClientInfoSelectActivity extends BaseTopActivity implements View.On
         map.put("mode","name");
         List<Object> clist = CGlobal.dbManager.getClientList(map);
         setupAdapterName(clist);
+
+        TblClient tblClient = (TblClient) clist.get(clist.size()-1);
+        spinnerClientName.setSelection(clist.size()-1);
+        Message message = new Message();
+        message.what = 100;
+        message.obj = tblClient;
+        mHandler.sendMessageDelayed(message,100);
     }
     List<String> clientNames = new ArrayList<>();
     List<String> clientLocations = new ArrayList<>();
@@ -228,7 +270,7 @@ public class ClientInfoSelectActivity extends BaseTopActivity implements View.On
                 tblClient.tc_location = location;
                 tblClient.tc_job = job;
                 tblClient.tc_jobnum = jobnum;
-                TblClient dup = CGlobal.dbManager.checkDuplicate(tblClient);
+                TblClient dup = CGlobal.dbManager.checkDuplicateClient(tblClient);
                 if (dup!=null){
                     edtDate.setText(dup.tc_date);
                     int cnt = spinner.getAdapter().getCount();

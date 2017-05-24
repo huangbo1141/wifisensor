@@ -3,6 +3,7 @@ package robin.com.wifisensor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 
@@ -44,17 +45,15 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
             ex.printStackTrace();
         }
 
-        init(filename);
+        init();
     }
     String track ;
     String origin;
     TblClient tblClient;
 
-    String tblTrack;
-    void init(String filename) {
-        if (filename == null) {
-            CGlobal.drawGraphSample(mChart, this);
-        }
+    TblTrack tblTrack;
+    void init() {
+
         Intent intent = getIntent();
         try{
             track = intent.getStringExtra("track");
@@ -64,16 +63,21 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
 
         }
         try{
-            tblTrack = intent.getStringExtra("track_data");
+            tblTrack = (TblTrack) intent.getSerializableExtra("track_data");
         }catch (Exception ex){
 
         }
         if (tblTrack!=null){
             // review mode
+            btnRedo.setVisibility(View.GONE);
 
         }
         btnRedo.setOnClickListener(this);
         btnNext.setOnClickListener(this);
+        updateGraph();
+    }
+    public void updateGraph(){
+        CGlobal.drawGraphSample(mChart, this);
     }
 
     @Override
@@ -85,7 +89,7 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
                 break;
             }
             case R.id.btnNext:{
-                if (tblClient !=null){
+                if (tblTrack ==null){
                     TblTrack tblTrack = new TblTrack();
                     tblTrack.tc_id = tblClient.tc_id;
                     tblTrack.tt_track = track;
@@ -97,6 +101,15 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
                     intent.putExtra("client",tblClient);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                }else{
+                    // next track
+                    TblTrack track =  CGlobal.dbManager.checkNextTrack(tblTrack);
+                    if (track !=null){
+                        tblTrack = track;
+                        updateGraph();
+                    }else{
+                        Toast.makeText(this,"No More Tracks",Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 break;

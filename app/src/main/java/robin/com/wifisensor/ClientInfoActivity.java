@@ -4,16 +4,11 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import robin.com.wifisensor.Doc.CGlobal;
 import robin.com.wifisensor.Doc.Constants;
-import robin.com.wifisensor.Utils.SharedPreference;
 import robin.com.wifisensor.model.tbl.TblClient;
 
 /**
@@ -214,10 +208,10 @@ public class ClientInfoActivity extends BaseTopActivity implements View.OnClickL
                     tblClient.tc_jobnum = cinfo_jobnumber;
                     tblClient.tc_date = cinfo_date;
                     tblClient.tc_interval = cinfo_interval;
-                    TblClient dup = CGlobal.dbManager.checkDuplicate(tblClient);
+                    TblClient dup = CGlobal.dbManager.checkDuplicateClient(tblClient);
                     if (dup == null){
                         CGlobal.dbManager.insertClient(tblClient);
-                        TblClient data = CGlobal.dbManager.checkDuplicate(tblClient);
+                        TblClient data = CGlobal.dbManager.checkDuplicateClient(tblClient);
 
                         Intent intent = new Intent(this,TrackListActivity.class);
                         intent.putExtra("client",data);

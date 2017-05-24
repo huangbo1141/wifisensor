@@ -58,8 +58,7 @@ public class BaseTopActivity extends AppCompatActivity{
             int id = view.getId();
             switch (id){
                 case R.id.imgLogo:{
-                    Intent intent = new Intent(BaseTopActivity.this,MainActivity.class);
-                    startActivity( intent);
+                    goHome();
                     break;
                 }
                 case R.id.activity_main_logout: {
@@ -69,6 +68,11 @@ public class BaseTopActivity extends AppCompatActivity{
             }
         }
     };
+
+    protected void goHome(){
+        Intent intent = new Intent(BaseTopActivity.this,MainActivity.class);
+        startActivity( intent);
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

@@ -33,17 +33,32 @@ public class TrackListActivity extends BaseTopActivity implements View.OnClickLi
     @BindView(R.id.layRoot)
     LinearLayout layRoot;
 
-    @BindView(R.id.txtTrack)
-    TextView txtTrack;
+    @BindView(R.id.edtTrack)
+    EditText edtTrack;
 
-    @BindView(R.id.spinnerOrigin)
-    Spinner spinnerOrigin;
+    @BindView(R.id.edtOrigin)
+    EditText edtOrigin;
 
     @BindView(R.id.btnAction)
     View btnAction;
 
     @BindView(R.id.viewAction)
     View viewAction;
+
+    @BindView(R.id.btnTrackPlus)
+    View btnTrackPlus;
+
+    @BindView(R.id.btnTrackMinus)
+    View btnTrackMinus;
+
+    @BindView(R.id.btnOriginPlus)
+    View btnOriginPlus;
+
+    @BindView(R.id.btnOriginMinus)
+    View btnOriginMinus;
+
+    @BindView(R.id.btnComplete)
+    View btnComplete;
 
 
     private boolean review_mode = false;
@@ -82,38 +97,70 @@ public class TrackListActivity extends BaseTopActivity implements View.OnClickLi
             }
             TblTrack tblTrack = (TblTrack) data.get(data.size()-1);
             int track = Integer.valueOf(tblTrack.tt_track);
-            txtTrack.setText(String.valueOf(track+1));
+            edtTrack.setText(String.valueOf(track+1));
 
-
+            int origin = Integer.valueOf(tblTrack.tt_origin);
+            edtOrigin.setText(String.valueOf(origin+1));
         }else{
-            txtTrack.setText("1");
+            edtTrack.setText("1");
+            edtOrigin.setText("1");
         }
 
-        List<String> list = new ArrayList<>();
-        for (int i=0; i<100; i++){
-            list.add(String.valueOf(i+1));
-        }
-        setSpinner(list);
 
         btnAction.setOnClickListener(this);
-    }
-    void setSpinner(List<String> list ){
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerOrigin.setAdapter(dataAdapter);
+        btnOriginMinus.setOnClickListener(this);
+        btnOriginPlus.setOnClickListener(this);
+        btnTrackMinus.setOnClickListener(this);
+        btnTrackPlus.setOnClickListener(this);
+        btnComplete.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
+            case R.id.btnComplete:{
+                goHome();
+                break;
+            }
+            case R.id.btnTrackMinus:{
+                String track = edtTrack.getText().toString();
+                int num = Integer.valueOf(track);
+                num--;
+                if (num>0){
+                    edtTrack.setText(String.valueOf(num));
+                }
+                break;
+            }
+            case R.id.btnTrackPlus:{
+                String track = edtTrack.getText().toString();
+                int num = Integer.valueOf(track);
+                num++;
+                edtTrack.setText(String.valueOf(num));
+                break;
+            }
+            case R.id.btnOriginMinus:{
+                String track = edtOrigin.getText().toString();
+                int num = Integer.valueOf(track);
+                num--;
+                if (num>0){
+                    edtOrigin.setText(String.valueOf(num));
+                }
+                break;
+            }
+            case R.id.btnOriginPlus:{
+                String track = edtOrigin.getText().toString();
+                int num = Integer.valueOf(track);
+                num++;
+                edtOrigin.setText(String.valueOf(num));
+                break;
+            }
             case R.id.btnAction:{
                 // go with this info
-                String origin = spinnerOrigin.getSelectedItem().toString();
+                String origin = edtOrigin.getText().toString();
                 Intent intent = new Intent(this,TrackDetailActivity.class);
                 intent.putExtra("origin",origin);
-                intent.putExtra("track",txtTrack.getText().toString());
+                intent.putExtra("track",edtTrack.getText().toString());
                 intent.putExtra("client",tblClient);
                 startActivity(intent);
                 break;
@@ -173,8 +220,9 @@ public class TrackListActivity extends BaseTopActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 int id = view.getId();
-                switch (id){
-                    case  R.id.btnAction:{
+                int tag = (int) view.getTag();
+                switch (tag){
+                    case  100:{
                         if (item != null ) {
                             if (item instanceof Map){
                                 Map<String, Object> list = (Map<String, Object>) item;
@@ -197,9 +245,14 @@ public class TrackListActivity extends BaseTopActivity implements View.OnClickLi
                         }
                         break;
                     }
-                    case R.id.btnRemove:{
+                    case 200:{
                         int index = data.indexOf(item);
                         layRoot.removeView(mView);
+                        if (item != null ) {
+                            if (item instanceof TblTrack){
+                                CGlobal.dbManager.deleteTrack((TblTrack) item);
+                            }
+                        }
                         break;
                     }
                 }
@@ -216,6 +269,11 @@ public class TrackListActivity extends BaseTopActivity implements View.OnClickLi
 
             btnAction.setOnClickListener(onClickListener);
             btnRemove.setOnClickListener(onClickListener);
+
+            mView.setOnClickListener(onClickListener);
+            mView.setTag(100);
+            btnAction.setTag(100);
+            btnRemove.setTag(200);
         }
 
         public void setData(final Object data) {
