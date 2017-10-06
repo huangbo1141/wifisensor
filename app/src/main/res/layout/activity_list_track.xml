@@ -57,36 +57,34 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:id="@+id/viewAction">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
                 android:padding="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="TRACK"/>
                     <TextView
-                        android:layout_width="50dp"
+                        android:layout_width="40dp"
                         android:gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_height="wrap_content"
                         android:text="-"
                         android:id="@+id/btnTrackMinus"
                         android:textSize="50dp"/>
                     <EditText
                         android:id="@+id/edtTrack"
-                        android:paddingLeft="10dp"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:background="#00000000"
@@ -95,9 +93,7 @@
                         android:text="1"/>
                     <TextView
                         android:gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_width="50dp"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:text="+"
                         android:id="@+id/btnTrackPlus"
@@ -108,13 +104,11 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:text="FROM ORIGIN"/>
+                        android:text="FROM \nORIGIN"/>
                     <TextView
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_width="50dp"
+                        android:layout_width="40dp"
                         android:gravity="center"
                         android:layout_height="wrap_content"
                         android:text="-"
@@ -122,7 +116,6 @@
                         android:textSize="50dp"/>
                     <EditText
                         android:id="@+id/edtOrigin"
-                        android:paddingLeft="10dp"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
                         android:background="#00000000"
@@ -131,33 +124,31 @@
                         android:text="1"/>
                     <TextView
                         android:id="@+id/btnOriginPlus"
-                        android:layout_width="50dp"
+                        android:layout_width="40dp"
                         android:gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_height="wrap_content"
                         android:text="+"
                         android:textSize="40dp"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:orientation="vertical">
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btnAction"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
                     android:text="BEGIN" />
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/btnComplete"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
                     android:text="COMPLETE" />
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

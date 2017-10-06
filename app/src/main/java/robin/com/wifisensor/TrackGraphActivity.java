@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import robin.com.wifisensor.Doc.CGlobal;
@@ -52,9 +54,15 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
     TblClient tblClient;
 
     TblTrack tblTrack;
+    ArrayList<String> received_data = new ArrayList<>();
     void init() {
 
         Intent intent = getIntent();
+        try{
+            received_data = intent.getStringArrayListExtra("received_data");
+        }catch (Exception ex){
+
+        }
         try{
             track = intent.getStringExtra("track");
             origin = intent.getStringExtra("origin");
@@ -77,7 +85,8 @@ public class TrackGraphActivity extends BaseTopActivity implements View.OnClickL
         updateGraph();
     }
     public void updateGraph(){
-        CGlobal.drawGraphSample(mChart, this);
+//        CGlobal.drawGraphSample(mChart, this);
+        CGlobal.drawGraph(received_data,mChart,TrackGraphActivity.this);
     }
 
     @Override

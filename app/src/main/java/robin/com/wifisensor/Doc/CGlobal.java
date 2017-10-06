@@ -32,6 +32,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import org.json.JSONArray;
+
 import robin.com.wifisensor.LoginActivity;
 import robin.com.wifisensor.MainActivity;
 import robin.com.wifisensor.Utils.SharedPreference;
@@ -1067,28 +1070,29 @@ public class CGlobal {
         return set1;
     }
 
-    public static LineDataSet getDataSet(QuizResult data_t, int mode) {
-        if (data_t != null) {
-            ArrayList<Entry> yVals1 = new ArrayList<Entry>();
-            if (mode == 2) {
-                yVals1.add(new BarEntry(5.0f, Float.valueOf(data_t.getGSR5())));
-                yVals1.add(new BarEntry(7.0f, Float.valueOf(data_t.getGSR7())));
-                yVals1.add(new BarEntry(10.0f, Float.valueOf(data_t.getGAR10())));
-            } else {
-                yVals1.add(new BarEntry(5.0f, Float.valueOf(data_t.getGSR5())));
-                yVals1.add(new BarEntry(7.0f, Float.valueOf(data_t.getGSR7())));
-                yVals1.add(new BarEntry(10.0f, Float.valueOf(data_t.getGAR10())));
-                yVals1.add(new BarEntry(12.0f, Float.valueOf(data_t.getGSR7())));
-                yVals1.add(new BarEntry(15.0f, Float.valueOf(data_t.getGSR7())));
-            }
+    public static LineDataSet getDataSet(ArrayList<String> listdata, int mode) {
+        if (listdata != null) {
+            ArrayList<Entry> yVals1 = new ArrayList<>();
+            for (int i=0;i<listdata.size();i++){
+                String jsonArray = listdata.get(i);
+                String[] pieces =  jsonArray.split("_");
+                try{
 
+                    float x = Float.parseFloat(pieces[0]);
+                    float y = Float.parseFloat(pieces[1]);
+                    yVals1.add(new BarEntry(x, y));
+                }catch (Exception ex){
+
+                }
+
+            }
             LineDataSet set1;
 
             int clr_t = Color.parseColor("#4472c4");
             int clr_f = Color.parseColor("#ed7d31");
             int clr_d = Color.parseColor("#ff0000");
             if (mode == 1) {
-                set1 = new LineDataSet(yVals1, "Correct");
+                set1 = new LineDataSet(yVals1, "");
                 set1.setCircleColor(clr_t);
                 set1.setColor(clr_t);
             } else if (mode == 2) {
@@ -1096,7 +1100,7 @@ public class CGlobal {
                 set1.setCircleColor(clr_d);
                 set1.setColor(clr_d);
             } else {
-                set1 = new LineDataSet(yVals1, "Incorrect");
+                set1 = new LineDataSet(yVals1, "");
                 set1.setCircleColor(clr_f);
                 set1.setColor(clr_f);
             }
@@ -1174,15 +1178,11 @@ public class CGlobal {
 
     }
 
-    public static void drawGraph(QuizResult data_t, QuizResult data_f, QuizResult data_d, LineChart mChart, Context context) {
+    public static void drawGraph(ArrayList<String> datalist, LineChart mChart, Context context) {
         List<ILineDataSet> dataList = new ArrayList<>();
-        LineDataSet set1 = getDataSet(data_t, 1);
-        LineDataSet set2 = getDataSet(data_f, 0);
-        LineDataSet set3 = getDataSet(data_d, 2);
+        LineDataSet set1 = getDataSet(datalist, 1);
 
         if (set1 != null) dataList.add(set1);
-        if (set2 != null) dataList.add(set2);
-        if (set3 != null) dataList.add(set3);
 
         // create a data object with the datasets
         LineData data = new LineData(dataList);

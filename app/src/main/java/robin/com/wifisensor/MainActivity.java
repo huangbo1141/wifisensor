@@ -1,10 +1,13 @@
 package robin.com.wifisensor;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -15,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -61,6 +65,8 @@ public class MainActivity extends BaseTopActivity implements View.OnClickListene
         initHeaderBar(0);
         CGlobal.initGlobal(this);
         init();
+
+//        testRouter();
     }
 
     protected Location mLastLocation;
@@ -140,7 +146,10 @@ public class MainActivity extends BaseTopActivity implements View.OnClickListene
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient!=null){
+            mGoogleApiClient.connect();
+        }
+
     }
     @Override
     public void onConnected(Bundle bundle) {
@@ -163,6 +172,49 @@ public class MainActivity extends BaseTopActivity implements View.OnClickListene
             }
         }
     }
+
+    public String   s_dns1 ;
+    public String   s_dns2;
+    public String   s_gateway;
+    public String   s_ipAddress;
+    public String   s_leaseDuration;
+    public String   s_netmask;
+    public String   s_serverAddress;
+    TextView info;
+    DhcpInfo d;
+    WifiManager wifii;
+    private void testRouter(){
+        WifiManager wifii= (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        d=wifii.getDhcpInfo();
+
+        s_dns1="DNS 1: "+String.valueOf(d.dns1);
+        s_dns2="DNS 2: "+String.valueOf(d.dns2);
+        s_gateway="Default Gateway: "+String.valueOf(d.gateway);
+        s_ipAddress="IP Address: "+String.valueOf(d.ipAddress);
+        s_leaseDuration="Lease Time: "+String.valueOf(d.leaseDuration);
+        s_netmask="Subnet Mask: "+String.valueOf(d.netmask);
+        s_serverAddress="Server IP: "+String.valueOf(d.serverAddress);
+
+        //dispaly them
+        try {
+            String routerip = intToIp(d.gateway);
+            String dns1 = intToIp(d.dns1);
+            String dns2 = intToIp(d.dns2);
+
+            Log.d("tag","Network Info\n"+s_dns1+"\n"+s_dns2+"\n"+s_gateway+"\n"+s_ipAddress+"\n"+s_leaseDuration+"\n"+s_netmask+"\n"+s_serverAddress);
+            Log.d("tag",routerip);
+        }catch (Exception ex){
+
+        }
+    }
+    public String intToIp(int i) {
+
+        return ((i >> 24 ) & 0xFF ) + "." +
+                ((i >> 16 ) & 0xFF) + "." +
+                ((i >> 8 ) & 0xFF) + "." +
+                ( i & 0xFF) ;
+    }
+
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */

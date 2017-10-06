@@ -71,35 +71,40 @@ public class ClientInfoSelectActivity extends BaseTopActivity implements View.On
         @Override
         public void handleMessage(Message msg) {
             int what = msg.what;
-            switch (what){
-                case 100:{
-                    if (spinnerLocation.getAdapter().getCount()>0){
-                        spinnerLocation.setSelection(0);
-                        mHandler.sendEmptyMessageDelayed(101,100);
-                    }else{
-                        mHandler.sendEmptyMessageDelayed(100,100);
+            try{
+                switch (what){
+                    case 100:{
+                        if (spinnerLocation.getAdapter().getCount()>0){
+                            spinnerLocation.setSelection(0);
+                            mHandler.sendEmptyMessageDelayed(101,100);
+                        }else{
+                            mHandler.sendEmptyMessageDelayed(100,100);
+                        }
+                        break;
                     }
-                    break;
-                }
-                case 101:{
-                    if (spinnerJob.getAdapter().getCount()>0){
-                        spinnerJob.setSelection(0);
-                        mHandler.sendEmptyMessageDelayed(102,100);
-                    }else{
-                        mHandler.sendEmptyMessageDelayed(101,100);
+                    case 101:{
+                        if (spinnerJob.getAdapter().getCount()>0){
+                            spinnerJob.setSelection(0);
+                            mHandler.sendEmptyMessageDelayed(102,100);
+                        }else{
+                            mHandler.sendEmptyMessageDelayed(101,100);
+                        }
+                        break;
                     }
-                    break;
-                }
-                case 102:{
-                    if (spinnerJobNumber.getAdapter().getCount()>0){
-                        spinnerJobNumber.setSelection(0);
-                        mHandler.sendEmptyMessageDelayed(103,100);
-                    }else{
-                        mHandler.sendEmptyMessageDelayed(102,100);
+                    case 102:{
+                        if (spinnerJobNumber.getAdapter().getCount()>0){
+                            spinnerJobNumber.setSelection(0);
+                            mHandler.sendEmptyMessageDelayed(103,100);
+                        }else{
+                            mHandler.sendEmptyMessageDelayed(102,100);
+                        }
+                        break;
                     }
-                    break;
                 }
+            }catch (Exception ex){
+
             }
+
         }
     };
 
@@ -149,7 +154,7 @@ public class ClientInfoSelectActivity extends BaseTopActivity implements View.On
         Message message = new Message();
         message.what = 100;
         message.obj = tblClient;
-        mHandler.sendMessageDelayed(message,100);
+        mHandler.sendMessageDelayed(message,1000);
     }
     List<String> clientNames = new ArrayList<>();
     List<String> clientLocations = new ArrayList<>();
