@@ -2,6 +2,8 @@ package robin.com.wifisensor.model.tbl;
 
 import android.graphics.Bitmap;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -19,5 +21,36 @@ public class TblClient extends Object implements Serializable {
     @Override
     public String toString() {
         return tc_name;
+    }
+
+    public JSONObject getJsonObject(){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("name",tc_name);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("location",tc_location);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("job",tc_job);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("jobnumber",tc_jobnum);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("name",tc_name);
+        }catch (Exception ex){
+
+        }
+
+        return jsonObject;
     }
 }

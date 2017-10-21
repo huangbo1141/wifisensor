@@ -34,6 +34,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import robin.com.wifisensor.LoginActivity;
 import robin.com.wifisensor.MainActivity;
@@ -41,6 +42,8 @@ import robin.com.wifisensor.Utils.SharedPreference;
 import robin.com.wifisensor.Utils.Utils;
 import robin.com.wifisensor.model.PhotoManager;
 import robin.com.wifisensor.model.QuizResult;
+import robin.com.wifisensor.model.tbl.TblClient;
+import robin.com.wifisensor.model.tbl.TblTrack;
 import robin.com.wifisensor.util.database.ImageDatabaseHelper;
 
 import java.io.BufferedReader;
@@ -52,10 +55,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -572,6 +577,92 @@ public class CGlobal {
 
                 if (outputStream != null) {
                     outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    public static ArrayList<String> readFromDisk(File futureStudioIconFile) {
+        ArrayList<String> data = new ArrayList<>();
+        try {
+            FileInputStream is;
+            BufferedReader reader;
+            final File file = futureStudioIconFile;
+
+            if (file.exists()) {
+                is = new FileInputStream(file);
+                reader = new BufferedReader(new InputStreamReader(is));
+                String line = reader.readLine();
+                while(line != null){
+                    Log.d("StackOverflow", line);
+                    String[] points = line.split(";");
+                    if (points!=null && points.length>0){
+                        for (int i=0; i<points.length; i++){
+                            data.add(points[i]);
+                        }
+                    }
+
+                    line = reader.readLine();
+                }
+            }
+
+        } catch (IOException e) {
+
+        }
+        return data;
+    }
+    public static boolean writeToDisk(ArrayList<String> body, File futureStudioIconFile) {
+        try {
+            // todo change the file location/name according to your needs
+//            File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+            OutputStreamWriter myOutWriter = null;
+            try {
+                outputStream = new FileOutputStream(futureStudioIconFile);
+                myOutWriter = new OutputStreamWriter(outputStream);
+
+                int step = 20;
+                int cnt = 0;
+                String temp = "";
+                for (int i=0; i<body.size(); i++){
+                    String row = body.get(i);
+                    temp = temp + row + ";";
+                    cnt++;
+                    if (cnt>=step){
+                        temp = temp.substring(0,temp.length()-1);
+                        myOutWriter.append(temp);
+                        myOutWriter.append("\n\r");
+                        cnt = 0;
+                        temp = "";
+                    }
+                }
+                if (temp.length()>0){
+                    temp = temp.substring(0,temp.length()-1);
+                    myOutWriter.append(temp);
+                    myOutWriter.append("\n\r");
+                    cnt = 0;
+                    temp = "";
+                }
+
+                myOutWriter.flush();
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (myOutWriter != null) {
+                    myOutWriter.close();
                 }
             }
         } catch (IOException e) {
@@ -1279,5 +1370,36 @@ public class CGlobal {
         main,
         detail,
         test
+    }
+    public static File dirChecker(String dir)
+    {
+        File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(downloads.getAbsolutePath() + File.separator + dir);
+        if(!file.exists())
+        {
+            file.mkdirs();
+        }
+        return file;
+    }
+    public static String getPostData(TblTrack tblTrack){
+        String ret=null;
+        File wifisensor = dirChecker("wifisensor");
+        File file = new File(wifisensor.getAbsolutePath() + File.separator + tblTrack.tt_id+".txt");
+        ArrayList<String> received_data = CGlobal.readFromDisk(file);
+        TblClient client = CGlobal.dbManager.getClient(tblTrack);
+        JSONObject jsonObject = client.getJsonObject();
+        jsonObject = tblTrack.getJsonObject(jsonObject);
+        JSONArray jsonArray = new JSONArray();
+        for (int i=0; i<received_data.size(); i++){
+            jsonArray.put(received_data.get(i));
+        }
+        try{
+            jsonObject.put("points",jsonArray);
+        }catch (Exception ex){
+
+        }
+        ret = jsonObject.toString();
+
+        return ret;
     }
 }

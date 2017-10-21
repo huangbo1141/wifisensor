@@ -7,7 +7,9 @@ package robin.com.wifisensor.Doc;
 public class Constants {
     public static final String defaultCountryID = "ZZ1";
 //    public static String url = "http://192.168.1.108/adminuser/";
-        public static String url = "http://api.sailtraks.com/";
+
+    public static String url = "http://vps.inventech.co.za/";
+    public static String key = "7ae0d73742609531dc77324e95e3b53d";
 
     public static int row_length = 8;
 //    public static final String BOTTOM_TAB_FIRST     = "tab_a_identifier";
@@ -31,7 +33,7 @@ public class Constants {
     public static final String mid_url = "Services/V3/Authentication.svc/";
     public static final String ACTION_LOGIN = mid_url +"AuthenticateUser";
     public static final String ACTION_REGISTER = "Services/V3/Account.svc/RegisterUser";
-    public static final String ACTION_AUTHENTICATION = "Services/V3/Authentication.svc/AuthenticateUser";
+    public static final String ACTION_POSTDATA = "GridTrack/default/call/jsonrpc/upload";
     public static final String ACTION_LISTTIMELINE = "Services/V3/Account.svc/GetUserTimeline";
     public static final String ACTION_LISTFRIEND = "Services/V3/Session.svc/GetFriends";
     public static final String ACTION_SESSION = "Services/V3/Session.svc/RequestSession";

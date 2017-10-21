@@ -1,5 +1,7 @@
 package robin.com.wifisensor.model.tbl;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -16,5 +18,27 @@ public class TblTrack extends Object implements Serializable {
     @Override
     public String toString() {
         return tt_origin;
+    }
+
+    public JSONObject getJsonObject(JSONObject jsonObject){
+        if (jsonObject ==null)
+            jsonObject = new JSONObject();
+        try{
+            jsonObject.put("device",tt_device);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("track",tt_track);
+        }catch (Exception ex){
+
+        }
+        try{
+            jsonObject.put("origin",tt_origin);
+        }catch (Exception ex){
+
+        }
+
+        return jsonObject;
     }
 }

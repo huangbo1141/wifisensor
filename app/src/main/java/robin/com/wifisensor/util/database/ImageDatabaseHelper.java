@@ -1,10 +1,12 @@
 package robin.com.wifisensor.util.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import robin.com.wifisensor.Doc.Constants;
 import robin.com.wifisensor.model.BaseModel;
 import robin.com.wifisensor.model.Country;
 import robin.com.wifisensor.model.tbl.TblClient;
@@ -262,7 +264,7 @@ public class ImageDatabaseHelper extends SQLiteOpenHelper {
         }
         return true;
     }
-    public boolean insertTrack(TblTrack data){
+    public TblTrack insertTrack(TblTrack data){
         SQLiteDatabase db = this.getWritableDatabase();
         String sql;
         try{
@@ -270,11 +272,23 @@ public class ImageDatabaseHelper extends SQLiteOpenHelper {
             ArrayList<String> exceps = new ArrayList<>(Arrays.asList(strings));
 
             sql = BaseModel.getInsertSql(data,ImageTable.TRACK_TABLE,exceps);
-            db.execSQL(sql);
+//            db.execSQL(sql);
+
+            ContentValues values = new ContentValues();
+            values.put("tc_id",data.tc_id);
+            values.put("tt_track",data.tt_track);
+            values.put("tt_origin",data.tt_origin);
+            values.put("tt_device",data.tt_device);
+            long id = db.insert("tbl_track","",values);
+            if (id>0){
+                data.tt_id = String.valueOf(id);
+                return data;
+            }
+
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return true;
+        return null;
     }
     public void deleteTrack(TblTrack data){
         try{
@@ -351,6 +365,56 @@ public class ImageDatabaseHelper extends SQLiteOpenHelper {
             country.tc_interval = interval;
         }
         return country;
+    }
+    public TblClient getClient(TblTrack tblTrack){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "select * from " + ImageTable.CLIENT_TABLE
+                + " where tc_id = "+tblTrack.tc_id ;
+
+
+        ArrayList<Object> countries = new ArrayList<>();
+        Cursor c = db.rawQuery(sql, null);
+        int count = 0;
+        TblClient client = null;
+        if (c.moveToFirst()) {
+            int cid = c.getColumnIndex(ImageTable.CLIENT_ID);
+            int cname = c.getColumnIndex(ImageTable.CLIENT_NAME);
+            int clocation = c.getColumnIndex(ImageTable.CLIENT_LOCATION);
+            int cjob = c.getColumnIndex(ImageTable.CLIENT_JOB);
+            int cjobnum = c.getColumnIndex(ImageTable.CLIENT_JOBNUM);
+            int cdate = c.getColumnIndex(ImageTable.CLIENT_DATE);
+            int cinterval = c.getColumnIndex(ImageTable.CLIENT_INTERVAL);
+
+            while (true) {
+                String id = c.getString(cid);
+                String name = c.getString(cname);
+                String location = c.getString(clocation);
+                String job = c.getString(cjob);
+                String jobnum = c.getString(cjobnum);
+                String date = c.getString(cdate);
+                String interval = c.getString(cinterval);
+
+
+                TblClient country = new TblClient();
+                country.tc_id = id;
+                country.tc_name = name;
+                country.tc_location = location;
+                country.tc_job = job;
+                country.tc_jobnum = jobnum;
+                country.tc_date = date;
+                country.tc_interval = interval;
+
+                client = country;
+
+
+                if (c.isLast())
+                    break;
+                c.moveToNext();
+            }
+
+        }
+        c.close();
+        return client;
     }
     public ArrayList<Object> getClientList(Map<String,Object> input){
         SQLiteDatabase db = this.getWritableDatabase();
